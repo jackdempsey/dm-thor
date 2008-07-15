@@ -26,17 +26,19 @@ class Dm < Thor
     end
     DM_REPOS.each do |r|
       puts "Updating #{r}..."
-      FileUtils.cd(r)
-      system("git fetch")
-      system("git checkout master")
-      system("git rebase origin/master")
-      FileUtils.cd("..")
+      FileUtils.cd(r){ |dir|
+        system("git fetch")
+        system("git checkout master")
+        system("git rebase origin/master")
+      }
     end
   end
   
   desc 'install', 'Install dm-core and dm-more'
   def install
     install = Install.new
+    install.extlib
+    install.do
     install.core
     install.more
   end
@@ -64,31 +66,76 @@ class Dm < Thor
   class Install < Thor
     desc 'core', 'Install dm-core'
     def core
-      FileUtils.cd("dm-core")
-      system("rake install")
-      FileUtils.cd("..")
+      FileUtils.cd("dm-core"){ |dir|
+        system("rake install")
+      }
     end
     
     desc 'more', 'Install dm-more'
     def more
-      FileUtils.cd("dm-more")
-      system("rake install")
-      FileUtils.cd("..")
+      FileUtils.cd("dm-more"){ |dir|
+        system("rake install")
+      }
     end
     
     desc 'extlib', 'Install extlib'
     def extlib
-      FileUtils.cd("extlib")
-      system("rake install")
-      FileUtils.cd("..")
+      FileUtils.cd("extlib"){ |dir|
+        system("rake install")
+      }
     end
 
     desc 'do', 'Install do'
     def do
-      FileUtils.cd("do")
-      system("rake install")
-      FileUtils.cd("..")
+      FileUtils.cd("do"){ |dir|
+        system("rake install")
+      }
     end
+ 
+   class Do < Thor
+     desc 'data_objects', 'Install data_objects'
+     def data_objects
+       FileUtils.cd("do/data_objects"){ |dir|
+         system("rake install")
+       }
+     end
+
+     desc 'mysql', 'Install do_mysql'
+     def mysql
+       FileUtils.cd("do/do_mysql"){ |dir|
+         system("rake install")
+       }
+     end
+
+     desc 'postgres', 'Install do_postgres'
+     def postgres
+       FileUtils.cd("do/do_postgres"){ |dir|
+         system("rake install")
+       }
+     end
+
+     desc 'sqlite3', 'Install do_sqlite3'
+     def sqlite3
+       FileUtils.cd("do/do_sqlite3"){ |dir|
+         system("rake install")
+       }
+     end
+     
+     desc 'derby', 'Install do_derby'
+     def derby
+       FileUtils.cd("do/do_derby"){ |dir|
+         system("rake install")
+       }
+     end
+
+     desc 'hsqldb', 'Install do_hsqldb'
+     def hsqldb
+       FileUtils.cd("do/do_hsqldb"){ |dir|
+         system("rake install")
+       }
+     end
+
+   end
       
   end
 end
