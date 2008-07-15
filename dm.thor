@@ -1,3 +1,5 @@
+# Initial development done by xilef
+# based on merb-thor
 class Dm < Thor
 
   DM_REPOS = ["extlib", "dm-core", "dm-more", "do"]
