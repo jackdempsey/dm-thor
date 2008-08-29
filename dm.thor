@@ -13,7 +13,7 @@ class Dm < Thor
     require "fileutils"
     FileUtils.mkdir("dm")
     FileUtils.cd("dm")
-    DM_REPOS.each {|r| system("git clone git://github.com/wycats/#{r}.git") }
+    DM_REPOS.each {|r| system("git clone git://github.com/sam/#{r}.git") }
   end
   
   desc 'update', 'Update your local dm repositories.  Run from inside the top-level dm directory.'
