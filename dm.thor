@@ -26,15 +26,17 @@ class Dm < Thor
     end
     DM_REPOS.each do |r|
       puts "Updating #{r}..."
-      FileUtils.cd(r){ |dir|
-        system("git fetch")
-        system("git checkout master")
-        system("git rebase origin/master")
-      }
+      FileUtils.cd(r) do
+        system %{
+          git fetch
+          git checkout master
+          git rebase origin/master
+        }
+      end
     end
   end
-  
-  desc 'install', 'Install dm-core and dm-more'
+
+  desc 'install', 'Install extlib, dm-core and dm-more'
   def install
     install = Install.new
     install.extlib
@@ -66,76 +68,74 @@ class Dm < Thor
   class Install < Thor
     desc 'core', 'Install dm-core'
     def core
-      FileUtils.cd("dm-core"){ |dir|
-        system("rake install")
-      }
+      check_for_dir("dm-core")
+      install_gem("dm-core")
     end
-    
+
     desc 'more', 'Install dm-more'
     def more
-      FileUtils.cd("dm-more"){ |dir|
-        system("rake install")
-      }
+      check_for_dir("dm-more")    
+      install_gem("dm-more")
     end
-    
+
     desc 'extlib', 'Install extlib'
     def extlib
-      FileUtils.cd("extlib"){ |dir|
-        system("rake install")
-      }
+      check_for_dir("extlib")
+      install_gem("extlib")
     end
 
     desc 'do', 'Install do'
     def do
-      FileUtils.cd("do"){ |dir|
-        system("rake install")
-      }
+      check_for_dir("do")      
+      install_gem("do")
     end
- 
-   class Do < Thor
-     desc 'data_objects', 'Install data_objects'
-     def data_objects
-       FileUtils.cd("do/data_objects"){ |dir|
-         system("rake install")
-       }
-     end
 
-     desc 'mysql', 'Install do_mysql'
-     def mysql
-       FileUtils.cd("do/do_mysql"){ |dir|
-         system("rake install")
-       }
-     end
+    class Do < Thor
 
-     desc 'postgres', 'Install do_postgres'
-     def postgres
-       FileUtils.cd("do/do_postgres"){ |dir|
-         system("rake install")
-       }
-     end
+      desc 'data_objects', 'Install data_objects'
+      def data_objects
+        install_gem("do/data_objects")
+      end
 
-     desc 'sqlite3', 'Install do_sqlite3'
-     def sqlite3
-       FileUtils.cd("do/do_sqlite3"){ |dir|
-         system("rake install")
-       }
-     end
-     
-     desc 'derby', 'Install do_derby'
-     def derby
-       FileUtils.cd("do/do_derby"){ |dir|
-         system("rake install")
-       }
-     end
+      desc 'mysql', 'Install do_mysql'
+      def mysql
+        install_gem("do/do_mysql")
+      end
 
-     desc 'hsqldb', 'Install do_hsqldb'
-     def hsqldb
-       FileUtils.cd("do/do_hsqldb"){ |dir|
-         system("rake install")
-       }
-     end
+      desc 'postgres', 'Install do_postgres'
+      def postgres
+        install_gem("do/do_postgres")
+      end
 
-   end
-      
+      desc 'sqlite3', 'Install do_sqlite3'
+      def sqlite3
+        install_gem("do/do_sqlite3")
+      end
+
+      desc 'derby', 'Install do_derby'
+      def derby
+        install_gem("do/do_derby")
+      end
+
+      desc 'hsqldb', 'Install do_hsqldb'
+      def hsqldb
+        install_gem("do/do_hsqldb")
+      end
+
+    end
+
   end
 end
+
+
+def install_gem(gem)
+  FileUtils.cd(gem) { system("rake install") }
+end
+
+def check_for_dir(dir)
+  unless File.exists?(dir)
+    puts "Error : Can't see '#{dir}' dir. Make sure you're in the correct directory and try again."
+    exit
+  end
+end
+
