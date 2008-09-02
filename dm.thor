@@ -121,7 +121,13 @@ class Dm < Thor
       def hsqldb
         install_gem("do/do_hsqldb")
       end
-
+      
+      desc "jdbc", "Install jdbc-support and jdbc_drivers"
+      def jdbc
+        install_gem("do/jdbc-support")
+        install_gem("do/jdbc_drivers")
+      end
+      
     end
 
   end
