@@ -52,7 +52,7 @@ class Dm < Thor
       sudo = windows ? ("") : ("sudo")
       `gem list dm`.split("\n").each do |line|
         next unless line =~ /^(dm[^ ]+)/
-        system("#{sudo} gem uninstall -a -i -x #{$1}")
+        system("#{sudo} gem uninstall -a -I -x #{$1}")
       end
     end
 
