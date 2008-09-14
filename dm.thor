@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 # Initial development done by xilef
 # based on merb-thor
 class Dm < Thor
@@ -5,7 +7,10 @@ class Dm < Thor
   DM_REPOS = ["extlib", "dm-core", "dm-more", "do"]
   
   desc "clone", "clone the main DM repositories"
+  method_options :protocol => :optional
   def clone
+    protocol = options[:protocol] || 'git'
+
     if File.exists?("dm")
       puts("./dm already exists!")
       exit
@@ -13,7 +18,7 @@ class Dm < Thor
     require "fileutils"
     FileUtils.mkdir("dm")
     FileUtils.cd("dm")
-    DM_REPOS.each {|r| system("git clone git://github.com/sam/#{r}.git") }
+    DM_REPOS.each {|r| system("git clone #{protocol}://github.com/sam/#{r}.git") }
   end
   
   desc 'update', 'Update your local dm repositories.  Run from inside the top-level dm directory.'
